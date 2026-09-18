@@ -1,0 +1,14 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package grpcslaughter;
+
+message GetAnimalRequest{
+}
+
+message GetAnimalResponse{
+  string name = 1;
+}
+
+service InformationService{
+  rpc getAnimal(GetAnimalRequest) returns (GetAnimalResponse);
+}
