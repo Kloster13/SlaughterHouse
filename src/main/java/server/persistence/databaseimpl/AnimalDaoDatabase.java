@@ -1,6 +1,7 @@
 package server.persistence.databaseimpl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.Order;
 import server.domain.Animal;
 import server.persistence.NotFound;
 import server.persistence.interfaces.AnimalDao;
@@ -37,6 +38,17 @@ public class AnimalDaoDatabase implements AnimalDao
   @Override public List<Animal> getAllAnimals()
   {
     return em.createQuery("SELECT a FROM Animal a", Animal.class).getResultList();
+  }
+
+  @Override public List<Animal> getAllFromProductId(long productId)
+  {
+    return em.createQuery(
+            "SELECT DISTINCT a FROM Animal a "
+                + "JOIN AnimalPart ap ON ap.animal = a "
+                + "JOIN ap.tray t "
+                + "JOIN t.products p "
+                + "WHERE p.id = :productId", Animal.class)
+        .setParameter("productId", productId).getResultList();
   }
 
   @Override public void deleteAnimal(long id)

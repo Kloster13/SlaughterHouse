@@ -10,5 +10,6 @@ public interface AnimalDao
   void update(Animal updatedAnimal);
   Animal getAnimalById(long id);
   List<Animal> getAllAnimals();
+  List<Animal> getAllFromProductId(long id);
   void deleteAnimal(long id);
 }
