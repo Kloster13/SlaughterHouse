@@ -1,8 +1,8 @@
 package server.persistence.databaseimpl;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import server.domain.Animal;
+import server.persistence.NotFound;
 import server.persistence.interfaces.AnimalDao;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class AnimalDaoDatabase implements AnimalDao
   {
     Animal toFind = em.find(Animal.class, id);
     if (toFind == null)
-      throw new EntityNotFoundException("Animal not found");
+      throw new NotFound("Animal not found");
     return toFind;
   }
 
@@ -41,10 +41,10 @@ public class AnimalDaoDatabase implements AnimalDao
 
   @Override public void deleteAnimal(long id)
   {
-    Animal toRemove = em.find(Animal.class, id);
+    Animal toRemove = getAnimalById(id);
     if (toRemove == null)
     {
-      throw new EntityNotFoundException("Animal not found");
+      throw new NotFound("Animal not found");
     }
     em.remove(toRemove);
   }

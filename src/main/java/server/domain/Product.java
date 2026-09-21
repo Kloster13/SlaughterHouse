@@ -1,20 +1,16 @@
 package server.domain;
 
+import com.google.type.DateTime;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
-@Entity @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Product
+@Entity @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) public abstract class Product
 {
   @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) private long id;
-  @ManyToMany
-  @JoinTable(
-      name = "product_tray",
-      joinColumns = @JoinColumn(name="product_id"),
-      inverseJoinColumns = @JoinColumn(name="tray_id")
-  )
-  private Set<Tray> trays;
+  @ManyToMany @JoinTable(name = "product_tray", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "tray_id")) private Set<Tray> trays;
+  private String serial;
+  private DateTime packagedTime;
   private double weight;
 
   public Product()
@@ -49,5 +45,25 @@ public abstract class Product
   public void setWeight(double weight)
   {
     this.weight = weight;
+  }
+
+  public String getSerial()
+  {
+    return serial;
+  }
+
+  public void setSerial(String serial)
+  {
+    this.serial = serial;
+  }
+
+  public DateTime getPackagedTime()
+  {
+    return packagedTime;
+  }
+
+  public void setPackagedTime(DateTime packagedTime)
+  {
+    this.packagedTime = packagedTime;
   }
 }
