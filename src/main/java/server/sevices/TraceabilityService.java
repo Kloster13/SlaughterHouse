@@ -2,6 +2,7 @@ package server.sevices;
 
 import jakarta.persistence.EntityManager;
 import server.domain.Animal;
+import server.domain.Product;
 import server.domain.Tray;
 import server.persistence.interfaces.AnimalDao;
 import server.persistence.interfaces.AnimalPartDao;
@@ -30,12 +31,13 @@ public class TraceabilityService
     this.em = em;
   }
 
-  public List<Animal> traceFromProductToAnimals(long productId)
+  public List<Animal> traceAnimalsFromProduct(long productId)
   {
-    List<Animal> animalsToReturn = new ArrayList<>();
-    Set<Tray> trays = productDao.getProductById(productId).getTrays();
-
-    return animalsToReturn;
+    return animalDao.getAnimalsByProductId(productId);
   }
 
+  public List<Product> traceProductFromAnimal(long animalId)
+  {
+    return productDao.getProductsByAnimalId(animalId);
+  }
 }

@@ -34,6 +34,13 @@ public class ProductDaoDatabase implements ProductDao
     return toFind;
   }
 
+  @Override public List<Product> getProductsByAnimalId(long animalId)
+  {
+    return em.createQuery("SELECT DISTINCT p FROM Product p " + "JOIN p.trays t "
+            + "JOIN AnimalPart ap ON ap.tray = t " + "JOIN ap.animal a " + "WHERE a.id = :animalId",
+        Product.class).setParameter("animalId", animalId).getResultList();
+  }
+
   @Override public List<Product> getAllProducts()
   {
     return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();

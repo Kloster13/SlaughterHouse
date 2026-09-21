@@ -2,13 +2,27 @@ syntax = "proto3";
 option java_multiple_files = true;
 package grpcslaughter;
 
-message GetAnimalRequest{
+enum AnimalType {
+  COW = 0;
+  PIG = 1;
+  CHICKEN = 2;
 }
 
-message GetAnimalResponse{
-  string name = 1;
+message Animal {
+  int64 id = 1;
+  int64 farmId = 2;
+  AnimalType type = 3;
+  double weight = 4;
+}
+
+message TraceAnimalsFromProductRequest{
+  int64 productId = 1;
+}
+
+message TraceAnimalsFromProductResponse{
+  repeated Animal animals = 1;
 }
 
 service InformationService{
-  rpc getAnimal(GetAnimalRequest) returns (GetAnimalResponse);
+  rpc getAnimal(TraceAnimalsFromProductRequest) returns (TraceAnimalsFromProductResponse);
 }

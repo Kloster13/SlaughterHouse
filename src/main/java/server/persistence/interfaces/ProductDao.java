@@ -9,6 +9,7 @@ public interface ProductDao
   void createProduct(Product product);
   void update(Product updatedProduct);
   Product getProductById(long id);
+  List<Product> getProductsByAnimalId(long animalId);
   List<Product> getAllProducts();
   void deleteProduct(long id);
 }

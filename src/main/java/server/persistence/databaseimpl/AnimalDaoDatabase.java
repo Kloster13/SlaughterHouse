@@ -40,7 +40,7 @@ public class AnimalDaoDatabase implements AnimalDao
     return em.createQuery("SELECT a FROM Animal a", Animal.class).getResultList();
   }
 
-  @Override public List<Animal> getAllFromProductId(long productId)
+  @Override public List<Animal> getAnimalsByProductId(long productId)
   {
     return em.createQuery(
             "SELECT DISTINCT a FROM Animal a "
