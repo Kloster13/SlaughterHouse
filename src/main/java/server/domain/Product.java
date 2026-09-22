@@ -3,6 +3,8 @@ package server.domain;
 import com.google.type.DateTime;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) public abstract class Product
@@ -10,11 +12,19 @@ import java.util.Set;
   @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) private long id;
   @ManyToMany @JoinTable(name = "product_tray", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "tray_id")) private Set<Tray> trays;
   private String serial;
-  private DateTime packagedTime;
+  private LocalDate packagedDate;
   private double weight;
 
   public Product()
   {
+  }
+
+  public Product(String serial, LocalDate packagedTime, double weight)
+  {
+    this.trays = new HashSet<>();
+    this.serial = serial;
+    this.packagedDate = packagedTime;
+    this.weight = weight;
   }
 
   public long getId()
@@ -57,13 +67,13 @@ import java.util.Set;
     this.serial = serial;
   }
 
-  public DateTime getPackagedTime()
+  public LocalDate getPackagedDate()
   {
-    return packagedTime;
+    return packagedDate;
   }
 
-  public void setPackagedTime(DateTime packagedTime)
+  public void setPackagedDate(LocalDate packagedDate)
   {
-    this.packagedTime = packagedTime;
+    this.packagedDate = packagedDate;
   }
 }
