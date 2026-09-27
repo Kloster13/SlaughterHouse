@@ -1,9 +1,8 @@
 package server.dto;
 
-import grpcslaughter.AnimalDTO;
-import grpcslaughter.TraceAnimalsFromProductRequest;
-import grpcslaughter.TraceAnimalsFromProductResponse;
+import grpcslaughter.*;
 import server.domain.Animal;
+import server.domain.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,5 +24,22 @@ public class DTOFactory
               .setFarmName(a.getFarm().getName()).build());
     }
     return TraceAnimalsFromProductResponse.newBuilder().addAllAnimals(listToReturn).build();
+  }
+
+  public static TraceProductsFromAnimalRequest createProductTraceRequest(long id)
+  {
+    return TraceProductsFromAnimalRequest.newBuilder().setAnimalId(id).build();
+  }
+
+  public static TraceProductsFromAnimalResponse createProductTraceResponse(List<Product> products)
+  {
+    ArrayList<ProductDto> productList = new ArrayList<>();
+    for (Product p : products)
+    {
+      productList.add(
+          ProductDto.newBuilder().setSerial(p.getSerial()).setPackagedDate(p.getPackagedDate().toString())
+              .setWeight(p.getWeight()).build());
+    }
+    return TraceProductsFromAnimalResponse.newBuilder().addAllProducts(productList).build();
   }
 }

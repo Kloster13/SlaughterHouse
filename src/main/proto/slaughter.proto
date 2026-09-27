@@ -10,6 +10,12 @@ message AnimalDTO {
   double weight = 4;
 }
 
+message ProductDto{
+  string serial = 1;
+  string packagedDate = 2;
+  double weight = 3;
+}
+
 message TraceAnimalsFromProductRequest{
   int64 productId = 1;
 }
@@ -18,6 +24,15 @@ message TraceAnimalsFromProductResponse{
   repeated AnimalDTO animals = 1;
 }
 
+message TraceProductsFromAnimalRequest{
+  int64 animalId = 1;
+}
+
+message TraceProductsFromAnimalResponse{
+  repeated ProductDto products = 1;
+}
+
 service InformationService{
   rpc traceAnimalsFromProduct(TraceAnimalsFromProductRequest) returns (TraceAnimalsFromProductResponse);
+  rpc traceProductsFromAnimal(TraceProductsFromAnimalRequest) returns (TraceProductsFromAnimalResponse);
 }
