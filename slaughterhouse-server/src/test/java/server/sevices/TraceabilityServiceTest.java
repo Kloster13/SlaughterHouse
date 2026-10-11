@@ -1,12 +1,12 @@
 package server.sevices;
 
+import domain.*;
+import domain.Package;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import server.domain.*;
-import server.domain.Package;
 import server.persistence.interfaces.AnimalDao;
 import server.persistence.interfaces.AnimalPartDao;
 import server.persistence.interfaces.ProductDao;

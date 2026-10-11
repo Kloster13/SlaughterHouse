@@ -1,8 +1,8 @@
 package server.dto;
 
 import grpcslaughter.*;
-import server.domain.Animal;
-import server.domain.Product;
+import domain.Animal;
+import domain.Product;
 
 import java.util.ArrayList;
 import java.util.List;

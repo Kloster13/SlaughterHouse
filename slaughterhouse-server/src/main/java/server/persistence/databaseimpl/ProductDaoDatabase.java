@@ -2,7 +2,7 @@ package server.persistence.databaseimpl;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import server.domain.Product;
+import domain.Product;
 import server.persistence.NotFound;
 import server.persistence.interfaces.ProductDao;
 

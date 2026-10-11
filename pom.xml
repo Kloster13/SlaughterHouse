@@ -18,6 +18,8 @@
 
     <modules>
         <module>slaughterhouse-server</module>
+        <module>domain</module>
+        <module>slaughterhouse-registration</module>
     </modules>
 
     <properties>

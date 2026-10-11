@@ -2,8 +2,7 @@ package server.persistence.databaseimpl;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import jakarta.persistence.criteria.Order;
-import server.domain.Animal;
+import domain.Animal;
 import server.persistence.NotFound;
 import server.persistence.interfaces.AnimalDao;
 

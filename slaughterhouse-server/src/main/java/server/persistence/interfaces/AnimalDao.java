@@ -1,6 +1,6 @@
 package server.persistence.interfaces;
 
-import server.domain.Animal;
+import domain.Animal;
 
 import java.util.List;
 

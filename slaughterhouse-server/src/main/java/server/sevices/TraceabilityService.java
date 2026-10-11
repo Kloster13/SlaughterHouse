@@ -2,17 +2,14 @@ package server.sevices;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.domain.Animal;
-import server.domain.Product;
-import server.domain.Tray;
+import domain.Animal;
+import domain.Product;
 import server.persistence.interfaces.AnimalDao;
 import server.persistence.interfaces.AnimalPartDao;
 import server.persistence.interfaces.ProductDao;
 import server.persistence.interfaces.TrayDao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class TraceabilityService

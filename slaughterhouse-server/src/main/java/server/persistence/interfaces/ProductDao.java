@@ -1,6 +1,6 @@
 package server.persistence.interfaces;
 
-import server.domain.Product;
+import domain.Product;
 
 import java.util.List;
 

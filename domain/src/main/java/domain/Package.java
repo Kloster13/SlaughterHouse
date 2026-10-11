@@ -1,6 +1,5 @@
-package server.domain;
+package domain;
 
-import com.google.type.DateTime;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDate;

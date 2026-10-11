@@ -1,6 +1,6 @@
 package server.persistence.interfaces;
 
-import server.domain.Tray;
+import domain.Tray;
 
 import java.util.List;
 

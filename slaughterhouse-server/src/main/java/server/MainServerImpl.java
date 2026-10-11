@@ -3,8 +3,8 @@ package server;
 import grpcslaughter.*;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
-import server.domain.Animal;
-import server.domain.Product;
+import domain.Animal;
+import domain.Product;
 import server.dto.DTOFactory;
 import server.sevices.TraceabilityService;
 
