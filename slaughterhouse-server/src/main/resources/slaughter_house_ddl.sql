@@ -2,6 +2,11 @@ DROP SCHEMA IF EXISTS slaughter_house CASCADE;
 CREATE SCHEMA IF NOT EXISTS slaughter_house;
 set search_path = "slaughter_house";
 
+CREATE SEQUENCE IF NOT EXISTS farm_seq START WITH 1 INCREMENT BY 50;
+CREATE SEQUENCE IF NOT EXISTS animal_seq START WITH 1 INCREMENT BY 50;
+CREATE SEQUENCE IF NOT EXISTS tray_seq START WITH 1 INCREMENT BY 50;
+CREATE SEQUENCE IF NOT EXISTS animal_part_seq START WITH 1 INCREMENT BY 50;
+
 CREATE TABLE IF NOT EXISTS farm
 (
     id   BIGINT PRIMARY KEY,
@@ -10,10 +15,11 @@ CREATE TABLE IF NOT EXISTS farm
 
 CREATE TABLE IF NOT EXISTS animal
 (
-    id      BIGINT PRIMARY KEY,
-    farm_id BIGINT REFERENCES farm (id),
-    type    VARCHAR(255),
-    weight  DOUBLE PRECISION
+    id           BIGINT PRIMARY KEY,
+    farm_id      BIGINT REFERENCES farm (id),
+    arrival_date Date,
+    type         VARCHAR(255),
+    weight       DOUBLE PRECISION
 );
 
 CREATE TABLE IF NOT EXISTS tray
@@ -35,18 +41,18 @@ CREATE SEQUENCE IF NOT EXISTS product_id_seq;
 
 CREATE TABLE IF NOT EXISTS package
 (
-    id           BIGINT PRIMARY KEY DEFAULT nextval('product_id_seq'),
-    serial       varchar(255),
+    id            BIGINT PRIMARY KEY DEFAULT nextval('product_id_seq'),
+    serial        varchar(255),
     packaged_Date DATE,
-    weight       DOUBLE PRECISION
+    weight        DOUBLE PRECISION
 );
 
 CREATE TABLE IF NOT EXISTS half_animal
 (
-    id           BIGINT PRIMARY KEY DEFAULT nextval('product_id_seq'),
-    serial       varchar(255),
+    id            BIGINT PRIMARY KEY DEFAULT nextval('product_id_seq'),
+    serial        varchar(255),
     packaged_Date DATE,
-    weight       DOUBLE PRECISION
+    weight        DOUBLE PRECISION
 );
 
 CREATE TABLE IF NOT EXISTS product_tray
@@ -63,12 +69,12 @@ VALUES (1, 'Nørgaard Gård'),
        (4, 'Vestjysk Landbrug'),
        (5, 'Bakkegården');
 
-INSERT INTO animal (id, farm_id, type, weight)
-VALUES (1, 1, 'COW', 620.5),
-       (2, 2, 'PIG', 110.0),
-       (3, 3, 'CHICKEN', 2.4),
-       (4, 4, 'COW', 580.0),
-       (5, 5, 'PIG', 95.3);
+INSERT INTO animal (id, farm_id, arrival_date, type, weight)
+VALUES (1, 1, '2026-01-10', 'COW', 620.5),
+       (2, 2, '2026-01-10', 'PIG', 110.0),
+       (3, 3, '2026-01-10', 'CHICKEN', 2.4),
+       (4, 4, '2026-01-10', 'COW', 580.0),
+       (5, 5, '2026-01-10', 'PIG', 95.3);
 
 INSERT INTO tray (id, max_weight, weight)
 VALUES (1, 200, 150.0),
@@ -126,3 +132,9 @@ VALUES (1, 1),
        (8, 8),
        -- tray 1 (dyr 1's "leg") indgår også i half_animal id 6 -> samme tray i to forskellige products
        (6, 1);
+
+-- Saet sekvenserne efter de id er der er indsat ovenfor (ogsaa hvis seed-data kommenteres ind)
+SELECT setval('farm_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM farm;
+SELECT setval('animal_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM animal;
+SELECT setval('tray_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM tray;
+SELECT setval('animal_part_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM animal_part;

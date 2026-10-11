@@ -19,9 +19,9 @@ public class DTOFactory
     ArrayList<AnimalDTO> listToReturn = new ArrayList<>();
     for (Animal a : animals)
     {
-      listToReturn.add(
-          AnimalDTO.newBuilder().setId(a.getId()).setType(a.getType().toString()).setWeight(a.getWeight())
-              .setFarmName(a.getFarm().getName()).build());
+      listToReturn.add(AnimalDTO.newBuilder().setId(a.getId()).setType(a.getType().toString())
+          .setArrivalDate(a.getArrivalDate().toString()).setWeight(a.getWeight())
+          .setFarmName(a.getFarm().getName()).build());
     }
     return TraceAnimalsFromProductResponse.newBuilder().addAllAnimals(listToReturn).build();
   }

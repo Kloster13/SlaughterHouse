@@ -2,23 +2,35 @@ package domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity public class Animal
 {
   @Id @GeneratedValue private Long id;
-
   @ManyToOne @JoinColumn(name = "farm_id") private Farm farm;
+  private LocalDate arrivalDate;
   @Enumerated(EnumType.STRING) private AnimalType type;
   private double weight;
-
   public Animal()
   {
   }
 
-  public Animal(Farm farm, double weight, AnimalType type)
+  public Animal(Farm farm,LocalDate arrivalDate, double weight, AnimalType type)
   {
     this.farm = farm;
+    this.arrivalDate=arrivalDate;
     this.weight = weight;
     this.type = type;
+  }
+
+  public LocalDate getArrivalDate()
+  {
+    return arrivalDate;
+  }
+
+  public void setArrivalDate(LocalDate arrivalDate)
+  {
+    this.arrivalDate = arrivalDate;
   }
 
   public Long getId()

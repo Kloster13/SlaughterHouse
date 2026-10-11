@@ -6,8 +6,9 @@ package grpcslaughter;
 message AnimalDTO {
   int64 id = 1;
   string farmName = 2;
-  string type = 3;
-  double weight = 4;
+  string arrivalDate=3;
+  string type = 4;
+  double weight = 5;
 }
 
 message ProductDto{
