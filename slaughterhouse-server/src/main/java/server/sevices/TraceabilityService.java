@@ -1,6 +1,7 @@
 package server.sevices;
 
-import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import server.domain.Animal;
 import server.domain.Product;
 import server.domain.Tray;
@@ -13,29 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class TraceabilityService
 {
   private final AnimalDao animalDao;
   private final AnimalPartDao partDao;
   private final ProductDao productDao;
   private final TrayDao trayDao;
-  private final EntityManager em;
 
   public TraceabilityService(AnimalDao animalDao, AnimalPartDao partDao, ProductDao productDao,
-      TrayDao trayDao, EntityManager em)
+      TrayDao trayDao)
   {
     this.animalDao = animalDao;
     this.partDao = partDao;
     this.productDao = productDao;
     this.trayDao = trayDao;
-    this.em = em;
   }
 
+  @Transactional(readOnly = true)
   public List<Animal> traceAnimalsFromProduct(long productId)
   {
     return animalDao.getAnimalsByProductId(productId);
   }
 
+  @Transactional(readOnly = true)
   public List<Product> traceProductFromAnimal(long animalId)
   {
     return productDao.getProductsByAnimalId(animalId);

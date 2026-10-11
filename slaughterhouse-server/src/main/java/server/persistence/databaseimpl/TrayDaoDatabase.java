@@ -1,12 +1,14 @@
 package server.persistence.databaseimpl;
 
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import server.domain.Tray;
 import server.persistence.NotFound;
 import server.persistence.interfaces.TrayDao;
 
 import java.util.List;
 
+@Repository
 public class TrayDaoDatabase implements TrayDao
 {
   private final EntityManager em;

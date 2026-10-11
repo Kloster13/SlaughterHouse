@@ -1,6 +1,5 @@
 package server.sevices;
 
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,13 +28,12 @@ class TraceabilityServiceTest
   @Mock private AnimalPartDao partDao;
   @Mock private ProductDao productDao;
   @Mock private TrayDao trayDao;
-  @Mock private EntityManager em;
 
   private TraceabilityService traceabilityService;
 
   @BeforeEach void setUp()
   {
-    traceabilityService = new TraceabilityService(animalDao, partDao, productDao, trayDao, em);
+    traceabilityService = new TraceabilityService(animalDao, partDao, productDao, trayDao);
   }
 
   @Test void traceAnimalsFromProduct_returnsAnimalsFromDao()

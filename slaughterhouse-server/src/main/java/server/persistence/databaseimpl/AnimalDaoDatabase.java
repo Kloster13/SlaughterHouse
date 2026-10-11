@@ -1,6 +1,7 @@
 package server.persistence.databaseimpl;
 
 import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import jakarta.persistence.criteria.Order;
 import server.domain.Animal;
 import server.persistence.NotFound;
@@ -8,6 +9,7 @@ import server.persistence.interfaces.AnimalDao;
 
 import java.util.List;
 
+@Repository
 public class AnimalDaoDatabase implements AnimalDao
 {
   private final EntityManager em;
