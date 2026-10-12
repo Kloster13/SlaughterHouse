@@ -12,6 +12,7 @@ import server.persistence.interfaces.AnimalPartDao;
 import server.persistence.interfaces.ProductDao;
 import server.persistence.interfaces.TrayDao;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +40,7 @@ class TraceabilityServiceTest
   @Test void traceAnimalsFromProduct_returnsAnimalsFromDao()
   {
     long productId = 1L;
-    Animal animal = new Animal(new Farm("TestFarm"), 200, AnimalType.COW);
+    Animal animal = new Animal(new Farm("TestFarm"), LocalDate.now(), 200, AnimalType.COW);
     when(animalDao.getAnimalsByProductId(productId)).thenReturn(List.of(animal));
 
     List<Animal> result = traceabilityService.traceAnimalsFromProduct(productId);
