@@ -29,6 +29,11 @@ public class ProductDaoDatabase implements ProductDao
     em.merge(updatedProduct);
   }
 
+  @Override public boolean existsById(UUID id)
+  {
+    return em.find(Product.class, id) != null;
+  }
+
   @Override public Product getProductById(UUID id)
   {
     Product toFind = em.find(Product.class, id);

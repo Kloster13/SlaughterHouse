@@ -32,4 +32,15 @@ import util.RabbitConstants;
   {
     return new Binding(RabbitConstants.PARTING_QUEUE_NAME, Binding.DestinationType.QUEUE, RabbitConstants.EXCHANGE_NAME, RabbitConstants.PARTING_KEY_NAME, null);
   }
+
+  // Packaging queue
+  @Bean public Queue packagingQueue()
+  {
+    return new Queue(RabbitConstants.PACKAGING_QUEUE_NAME, true);
+  }
+
+  @Bean Binding packagingBinding()
+  {
+    return new Binding(RabbitConstants.PACKAGING_QUEUE_NAME, Binding.DestinationType.QUEUE, RabbitConstants.EXCHANGE_NAME, RabbitConstants.PACKAGING_KEY_NAME, null);
+  }
 }

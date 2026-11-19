@@ -9,6 +9,7 @@ public interface ProductDao
 {
   void createProduct(Product product);
   void update(Product updatedProduct);
+  boolean existsById(UUID id);
   Product getProductById(UUID id);
   List<Product> getProductsByAnimalId(String earmark);
   List<Product> getAllProducts();

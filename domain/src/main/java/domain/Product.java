@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) public abstract class Product
 {
-  @Id @GeneratedValue private UUID id;
+  @Id private UUID id;
   @ManyToMany @JoinTable(name = "product_tray", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "tray_id")) private Set<Tray> trays;
   private String serial;
   private LocalDate packagedDate;
@@ -21,6 +21,12 @@ import java.util.UUID;
 
   public Product(String serial, LocalDate packagedTime, double weight)
   {
+    this(null, serial, packagedTime, weight);
+  }
+
+  public Product(UUID id, String serial, LocalDate packagedTime, double weight)
+  {
+    this.id = id;
     this.trays = new HashSet<>();
     this.serial = serial;
     this.packagedDate = packagedTime;

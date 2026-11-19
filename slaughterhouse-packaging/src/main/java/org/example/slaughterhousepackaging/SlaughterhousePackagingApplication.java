@@ -2,8 +2,9 @@ package org.example.slaughterhousepackaging;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication public class SlaughterhousePackagingApplication
+@SpringBootApplication @EnableScheduling public class SlaughterhousePackagingApplication
 {
 
   public static void main(String[] args)

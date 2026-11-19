@@ -9,4 +9,6 @@ public class RabbitConstants
   public static final String EXCHANGE_NAME = "house-exchange";
   public static final String PARTING_QUEUE_NAME = "parting-queue";
   public static final String PARTING_KEY_NAME = "parting-key";
+  public static final String PACKAGING_QUEUE_NAME = "packaging-queue";
+  public static final String PACKAGING_KEY_NAME = "packaging-key";
 }
