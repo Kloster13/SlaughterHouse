@@ -6,11 +6,12 @@ import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import util.RabbitConstants;
 import partingmessaging.TrayRegistrationMessage;
 import server.persistence.NotFound;
 import server.sevices.PartingService;
 
-@Component @RabbitListener(queues = RabbitConfig.PARTING_QUEUE_NAME) public class PartingQueueListener
+@Component @RabbitListener(queues = RabbitConstants.PARTING_QUEUE_NAME) public class PartingQueueListener
 {
   private static final Logger log = LoggerFactory.getLogger(PartingQueueListener.class);
   private final PartingService partingService;

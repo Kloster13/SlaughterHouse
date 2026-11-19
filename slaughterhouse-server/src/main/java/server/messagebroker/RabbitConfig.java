@@ -8,12 +8,10 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import util.RabbitConstants;
 
 @Configuration public class RabbitConfig
 {
-  public static final String EXCHANGE_NAME = "house-exchange";
-  public static final String PARTING_QUEUE_NAME ="parting-queue";
-  public static final String PARTING_KEY_NAME = "parting-key";
 
   @Bean public MessageConverter messageConverter()
   {
@@ -22,16 +20,16 @@ import org.springframework.context.annotation.Configuration;
 
   @Bean Exchange houseExchange()
   {
-    return ExchangeBuilder.topicExchange(EXCHANGE_NAME).durable(true).build();
+    return ExchangeBuilder.topicExchange(RabbitConstants.EXCHANGE_NAME).durable(true).build();
   }
 
   // Parting queue
   @Bean public Queue partingQueue()
   {
-    return new Queue(PARTING_QUEUE_NAME, true);
+    return new Queue(RabbitConstants.PARTING_QUEUE_NAME, true);
   }
   @Bean Binding partingBinding()
   {
-    return new Binding(PARTING_QUEUE_NAME, Binding.DestinationType.QUEUE, EXCHANGE_NAME, PARTING_KEY_NAME, null);
+    return new Binding(RabbitConstants.PARTING_QUEUE_NAME, Binding.DestinationType.QUEUE, RabbitConstants.EXCHANGE_NAME, RabbitConstants.PARTING_KEY_NAME, null);
   }
 }
