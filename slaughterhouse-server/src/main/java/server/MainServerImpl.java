@@ -9,6 +9,7 @@ import server.dto.DTOFactory;
 import server.sevices.TraceabilityService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class MainServerImpl extends InformationServiceGrpc.InformationServiceImplBase
@@ -23,7 +24,7 @@ public class MainServerImpl extends InformationServiceGrpc.InformationServiceImp
   @Override public void traceAnimalsFromProduct(TraceAnimalsFromProductRequest request,
       StreamObserver<TraceAnimalsFromProductResponse> responseObserver)
   {
-    List<Animal> animals = traceService.traceAnimalsFromProduct(java.util.UUID.fromString(request.getProductId()));
+    List<Animal> animals = traceService.traceAnimalsFromProduct(UUID.fromString(request.getProductId()));
     responseObserver.onNext(DTOFactory.createAnimalTraceResponse(animals));
     responseObserver.onCompleted();
   }

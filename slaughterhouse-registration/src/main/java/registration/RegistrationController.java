@@ -43,9 +43,9 @@ import java.util.List;
           + "If none are given, all animals are returned.")
   @ApiResponse(responseCode = "200", description = "List of matching animals (may be empty)")
   @GetMapping public ResponseEntity<List<AnimalDto>> getAnimals(
-      @Parameter(description = "Name of the farm the animal came from", example = "Sunny Farm")
+      @Parameter(description = "Name of the farm the animal came from", example = "Nørgaard Gård")
       @RequestParam(required = false) String farmName,
-      @Parameter(description = "Arrival date (ISO format yyyy-MM-dd)", example = "2026-10-14")
+      @Parameter(description = "Arrival date (ISO format yyyy-MM-dd)")
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date)
   {
     return ResponseEntity.ok(registrationService.getAnimalsByFarmNameOrDate(farmName,date));

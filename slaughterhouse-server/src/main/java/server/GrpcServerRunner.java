@@ -2,6 +2,7 @@ package server;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerInterceptors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class GrpcServerRunner implements SmartLifecycle
   {
     try
     {
-      server = ServerBuilder.forPort(port).addService(service).build().start();
+      server = ServerBuilder.forPort(port).addService(ServerInterceptors.intercept(service, new GrpcExceptionInterceptor())).build().start();
       Thread awaitThread = new Thread(() -> {
         try
         {
