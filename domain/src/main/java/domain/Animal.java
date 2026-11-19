@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity public class Animal
 {
-  @Id @GeneratedValue private Long id;
+  @Id private String earmark;
   @ManyToOne @JoinColumn(name = "farm_id") private Farm farm;
   private LocalDate arrivalDate;
   @Enumerated(EnumType.STRING) private AnimalType type;
@@ -15,8 +15,9 @@ import java.time.LocalDate;
   {
   }
 
-  public Animal(Farm farm,LocalDate arrivalDate, double weight, AnimalType type)
+  public Animal(String earmark, Farm farm,LocalDate arrivalDate, double weight, AnimalType type)
   {
+    this.earmark = earmark;
     this.farm = farm;
     this.arrivalDate=arrivalDate;
     this.weight = weight;
@@ -33,14 +34,14 @@ import java.time.LocalDate;
     this.arrivalDate = arrivalDate;
   }
 
-  public Long getId()
+  public String getEarmark()
   {
-    return id;
+    return earmark;
   }
 
-  public void setId(Long id)
+  public void setEarmark(String earmark)
   {
-    this.id = id;
+    this.earmark = earmark;
   }
 
   public Farm getFarm()

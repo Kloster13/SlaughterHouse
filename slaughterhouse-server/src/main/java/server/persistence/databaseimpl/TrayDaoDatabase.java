@@ -7,9 +7,9 @@ import server.persistence.NotFound;
 import server.persistence.interfaces.TrayDao;
 
 import java.util.List;
+import java.util.UUID;
 
-@Repository
-public class TrayDaoDatabase implements TrayDao
+@Repository public class TrayDaoDatabase implements TrayDao
 {
   private final EntityManager em;
 
@@ -28,7 +28,12 @@ public class TrayDaoDatabase implements TrayDao
     em.merge(updatedTray);
   }
 
-  @Override public Tray getTrayById(long id)
+  @Override public boolean existsById(UUID id)
+  {
+    return em.find(Tray.class, id) != null;
+  }
+
+  @Override public Tray getTrayById(UUID id)
   {
     Tray toFind = em.find(Tray.class, id);
     if (toFind == null)
@@ -41,7 +46,7 @@ public class TrayDaoDatabase implements TrayDao
     return em.createQuery("SELECT t FROM Tray t", Tray.class).getResultList();
   }
 
-  @Override public void deleteTray(long id)
+  @Override public void deleteTray(UUID id)
   {
     Tray toRemove = getTrayById(id);
     if (toRemove == null)

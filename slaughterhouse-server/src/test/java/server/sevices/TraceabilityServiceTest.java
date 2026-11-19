@@ -39,8 +39,8 @@ class TraceabilityServiceTest
 
   @Test void traceAnimalsFromProduct_returnsAnimalsFromDao()
   {
-    long productId = 1L;
-    Animal animal = new Animal(new Farm("TestFarm"), LocalDate.now(), 200, AnimalType.COW);
+    java.util.UUID productId = java.util.UUID.randomUUID();
+    Animal animal = new Animal("DK-1", new Farm("TestFarm"), LocalDate.now(), 200, AnimalType.COW);
     when(animalDao.getAnimalsByProductId(productId)).thenReturn(List.of(animal));
 
     List<Animal> result = traceabilityService.traceAnimalsFromProduct(productId);
@@ -53,7 +53,7 @@ class TraceabilityServiceTest
 
   @Test void traceAnimalsFromProduct_returnsEmptyListWhenNoAnimalsFound()
   {
-    long productId = 42L;
+    java.util.UUID productId = java.util.UUID.randomUUID();
     when(animalDao.getAnimalsByProductId(productId)).thenReturn(Collections.emptyList());
 
     List<Animal> result = traceabilityService.traceAnimalsFromProduct(productId);
@@ -64,7 +64,7 @@ class TraceabilityServiceTest
 
   @Test void traceProductFromAnimal_returnsProductsFromDao()
   {
-    long animalId = 1L;
+    String animalId = "DK-1";
     Product product = new Package("PKG-0001", null, 12.5);
     when(productDao.getProductsByAnimalId(animalId)).thenReturn(List.of(product));
 
@@ -78,7 +78,7 @@ class TraceabilityServiceTest
 
   @Test void traceProductFromAnimal_returnsEmptyListWhenNoProductsFound()
   {
-    long animalId = 42L;
+    String animalId = "DK-42";
     when(productDao.getProductsByAnimalId(animalId)).thenReturn(Collections.emptyList());
 
     List<Product> result = traceabilityService.traceProductFromAnimal(animalId);

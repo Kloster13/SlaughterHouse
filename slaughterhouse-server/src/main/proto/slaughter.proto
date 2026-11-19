@@ -4,7 +4,7 @@ package grpcslaughter;
 
 
 message AnimalDTO {
-  int64 id = 1;
+  string earmark = 1;
   string farmName = 2;
   string arrivalDate=3;
   string type = 4;
@@ -18,7 +18,7 @@ message ProductDto{
 }
 
 message TraceAnimalsFromProductRequest{
-  int64 productId = 1;
+  string productId = 1;
 }
 
 message TraceAnimalsFromProductResponse{
@@ -26,7 +26,7 @@ message TraceAnimalsFromProductResponse{
 }
 
 message TraceProductsFromAnimalRequest{
-  int64 animalId = 1;
+  string animalId = 1;
 }
 
 message TraceProductsFromAnimalResponse{

@@ -6,12 +6,13 @@ import domain.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DTOFactory
 {
-  public static TraceAnimalsFromProductRequest createAnimalTraceRequest(long id)
+  public static TraceAnimalsFromProductRequest createAnimalTraceRequest(UUID id)
   {
-    return TraceAnimalsFromProductRequest.newBuilder().setProductId(id).build();
+    return TraceAnimalsFromProductRequest.newBuilder().setProductId(id.toString()).build();
   }
 
   public static TraceAnimalsFromProductResponse createAnimalTraceResponse(List<Animal> animals)
@@ -19,16 +20,16 @@ public class DTOFactory
     ArrayList<AnimalDTO> listToReturn = new ArrayList<>();
     for (Animal a : animals)
     {
-      listToReturn.add(AnimalDTO.newBuilder().setId(a.getId()).setType(a.getType().toString())
+      listToReturn.add(AnimalDTO.newBuilder().setEarmark(a.getEarmark()).setType(a.getType().toString())
           .setArrivalDate(a.getArrivalDate().toString()).setWeight(a.getWeight())
           .setFarmName(a.getFarm().getName()).build());
     }
     return TraceAnimalsFromProductResponse.newBuilder().addAllAnimals(listToReturn).build();
   }
 
-  public static TraceProductsFromAnimalRequest createProductTraceRequest(long id)
+  public static TraceProductsFromAnimalRequest createProductTraceRequest(String earmark)
   {
-    return TraceProductsFromAnimalRequest.newBuilder().setAnimalId(id).build();
+    return TraceProductsFromAnimalRequest.newBuilder().setAnimalId(earmark).build();
   }
 
   public static TraceProductsFromAnimalResponse createProductTraceResponse(List<Product> products)

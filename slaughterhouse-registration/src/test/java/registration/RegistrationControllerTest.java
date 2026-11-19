@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RegistrationControllerTest
 {
+  private static final java.util.UUID FARM = java.util.UUID.randomUUID();
   @Mock private RegistrationService registrationService;
 
   private RegistrationController controller;
@@ -36,10 +37,10 @@ class RegistrationControllerTest
 
   @Test void getAnimal_returns200WithAnimal()
   {
-    Animal animal = new Animal(new Farm("Farm"), LocalDate.now(), 100, AnimalType.COW);
-    when(registrationService.getAnimal(1L)).thenReturn(animal);
+    Animal animal = new Animal("DK-1", new Farm("Farm"), LocalDate.now(), 100, AnimalType.COW);
+    when(registrationService.getAnimal("DK-1")).thenReturn(animal);
 
-    ResponseEntity<Animal> response = controller.getAnimal(1L);
+    ResponseEntity<Animal> response = controller.getAnimal("DK-1");
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertSame(animal, response.getBody());
@@ -48,7 +49,7 @@ class RegistrationControllerTest
   @Test void getAnimals_passesFiltersToServiceAndReturns200()
   {
     LocalDate date = LocalDate.of(2026, 10, 12);
-    List<AnimalDto> dtos = List.of(new AnimalDto(1L, "Farm", date, AnimalType.PIG, 80));
+    List<AnimalDto> dtos = List.of(new AnimalDto("DK-1", "Farm", date, AnimalType.PIG, 80));
     when(registrationService.getAnimalsByFarmNameOrDate("Farm", date)).thenReturn(dtos);
 
     ResponseEntity<List<AnimalDto>> response = controller.getAnimals("Farm", date);
@@ -60,8 +61,8 @@ class RegistrationControllerTest
 
   @Test void registerAnimal_returns201WithCreatedDto()
   {
-    RegisterRequest request = new RegisterRequest(1L, AnimalType.COW, 250);
-    AnimalDto dto = new AnimalDto(7L, "Farm", LocalDate.now(), AnimalType.COW, 250);
+    RegisterRequest request = new RegisterRequest("DK-1", FARM, AnimalType.COW, 250);
+    AnimalDto dto = new AnimalDto("DK-7", "Farm", LocalDate.now(), AnimalType.COW, 250);
     when(registrationService.registerAnimal(request)).thenReturn(dto);
 
     ResponseEntity<AnimalDto> response = controller.registerAnimal(request);

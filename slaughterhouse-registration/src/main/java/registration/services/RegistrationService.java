@@ -4,7 +4,6 @@ import domain.Animal;
 import domain.Farm;
 import org.springframework.stereotype.Service;
 import registration.dto.AnimalDto;
-import registration.dto.AnimalsFromDateRequest;
 import registration.dto.RegisterRequest;
 import registration.persistence.AnimalRepository;
 import registration.persistence.FarmRepository;
@@ -25,17 +24,17 @@ import java.util.List;
     this.farmRepository = farmRepository;
   }
 
-  public Animal getAnimal(long id)
+  public Animal getAnimal(String earmark)
   {
-    return animalRepository.findById(id).orElseThrow(() -> new NotFound("Animal Not found"));
+    return animalRepository.findById(earmark).orElseThrow(() -> new NotFound("Animal Not found"));
   }
 
   public AnimalDto registerAnimal(RegisterRequest request)
   {
     Farm farm = farmRepository.findById(request.farmId()).orElseThrow(() -> new NotFound("Farm Not found"));
     Animal savedAnimal = animalRepository.save(
-        new Animal(farm, LocalDate.now(), request.weight(), request.animalType()));
-    return new AnimalDto(savedAnimal.getId(), farm.getName(), savedAnimal.getArrivalDate(),
+        new Animal(request.earmark(), farm, LocalDate.now(), request.weight(), request.animalType()));
+    return new AnimalDto(savedAnimal.getEarmark(), farm.getName(), savedAnimal.getArrivalDate(),
         savedAnimal.getType(), savedAnimal.getWeight());
   }
 
@@ -53,7 +52,7 @@ import java.util.List;
     for (Animal animal : animals)
     {
       toReturn.add(
-          new AnimalDto(animal.getId(), animal.getFarm().getName(), animal.getArrivalDate(), animal.getType(),
+          new AnimalDto(animal.getEarmark(), animal.getFarm().getName(), animal.getArrivalDate(), animal.getType(),
               animal.getWeight()));
     }
     return toReturn;

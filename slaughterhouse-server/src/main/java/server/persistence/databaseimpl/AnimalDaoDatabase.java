@@ -7,6 +7,8 @@ import server.persistence.NotFound;
 import server.persistence.interfaces.AnimalDao;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class AnimalDaoDatabase implements AnimalDao
@@ -28,12 +30,9 @@ public class AnimalDaoDatabase implements AnimalDao
     em.merge(updatedAnimal);
   }
 
-  @Override public Animal getAnimalById(long id)
+  @Override public Optional<Animal> getAnimalByEarMark(String earmark)
   {
-    Animal toFind = em.find(Animal.class, id);
-    if (toFind == null)
-      throw new NotFound("Animal not found");
-    return toFind;
+   return Optional.ofNullable(em.find(Animal.class, earmark));
   }
 
   @Override public List<Animal> getAllAnimals()
@@ -41,7 +40,7 @@ public class AnimalDaoDatabase implements AnimalDao
     return em.createQuery("SELECT a FROM Animal a", Animal.class).getResultList();
   }
 
-  @Override public List<Animal> getAnimalsByProductId(long productId)
+  @Override public List<Animal> getAnimalsByProductId(UUID productId)
   {
     return em.createQuery(
             "SELECT DISTINCT a FROM Animal a "
@@ -52,13 +51,10 @@ public class AnimalDaoDatabase implements AnimalDao
         .setParameter("productId", productId).getResultList();
   }
 
-  @Override public void deleteAnimal(long id)
-  {
-    Animal toRemove = getAnimalById(id);
-    if (toRemove == null)
-    {
-      throw new NotFound("Animal not found");
-    }
-    em.remove(toRemove);
+  @Override
+  public void deleteAnimal(String earmark) {
+    Animal animal = Optional.ofNullable(em.find(Animal.class, earmark))
+        .orElseThrow(() -> new NotFound("Animal not found"));
+    em.remove(animal);
   }
 }

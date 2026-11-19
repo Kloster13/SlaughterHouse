@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) public abstract class Product
 {
-  @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) private long id;
+  @Id @GeneratedValue private UUID id;
   @ManyToMany @JoinTable(name = "product_tray", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "tray_id")) private Set<Tray> trays;
   private String serial;
   private LocalDate packagedDate;
@@ -26,12 +27,12 @@ import java.util.Set;
     this.weight = weight;
   }
 
-  public long getId()
+  public UUID getId()
   {
     return id;
   }
 
-  public void setId(long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

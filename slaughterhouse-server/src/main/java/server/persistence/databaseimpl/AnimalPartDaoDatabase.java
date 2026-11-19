@@ -1,5 +1,6 @@
 package server.persistence.databaseimpl;
 
+import domain.Tray;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import domain.AnimalPart;
@@ -7,6 +8,7 @@ import server.persistence.NotFound;
 import server.persistence.interfaces.AnimalPartDao;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class AnimalPartDaoDatabase implements AnimalPartDao
@@ -28,7 +30,12 @@ public class AnimalPartDaoDatabase implements AnimalPartDao
     em.merge(updatedAnimalPart);
   }
 
-  @Override public AnimalPart getAnimalPartById(long id)
+  @Override public boolean existsById(UUID id)
+  {
+    return em.find(AnimalPart.class, id) != null;
+  }
+
+  @Override public AnimalPart getAnimalPartById(UUID id)
   {
     AnimalPart toFind = em.find(AnimalPart.class, id);
     if (toFind == null)
@@ -41,7 +48,7 @@ public class AnimalPartDaoDatabase implements AnimalPartDao
     return em.createQuery("SELECT a FROM AnimalPart a", AnimalPart.class).getResultList();
   }
 
-  @Override public void deleteAnimalPart(long id)
+  @Override public void deleteAnimalPart(UUID id)
   {
     AnimalPart toRemove = getAnimalPartById(id);
     if (toRemove == null)

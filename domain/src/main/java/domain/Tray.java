@@ -7,10 +7,11 @@ import jakarta.persistence.ManyToMany;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity public class Tray
 {
-  @Id @GeneratedValue private Long id;
+  @Id private UUID id;
   @ManyToMany(mappedBy = "trays") private Set<Product> products;
   private int maxWeight;
   private double weight;
@@ -19,19 +20,20 @@ import java.util.Set;
   {
   }
 
-  public Tray(int maxWeight, double weight)
+  public Tray(UUID id,int maxWeight, double weight)
   {
+    this.id = id;
     this.products = new HashSet<>();
     this.maxWeight = maxWeight;
     this.weight = weight;
   }
 
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
 
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

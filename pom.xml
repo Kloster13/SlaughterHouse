@@ -20,6 +20,7 @@
         <module>slaughterhouse-server</module>
         <module>domain</module>
         <module>slaughterhouse-registration</module>
+        <module>Messaging</module>
     </modules>
 
     <properties>

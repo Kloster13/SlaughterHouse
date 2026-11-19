@@ -2,10 +2,12 @@ package domain;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 public class AnimalPart
 {
-  @Id @GeneratedValue private Long id;
+  @Id private UUID id;
   @ManyToOne @JoinColumn(name = "animal_id") private Animal animal;
   @ManyToOne @JoinColumn(name = "tray_id") private Tray tray;
   private double weight;
@@ -15,20 +17,21 @@ public class AnimalPart
   {
   }
 
-  public AnimalPart(Animal animal, Tray tray, double weight, String partType)
+  public AnimalPart(UUID id,Animal animal, Tray tray, double weight, String partType)
   {
+    this.id=id;
     this.animal = animal;
     this.tray = tray;
     this.weight = weight;
     this.partType = partType;
   }
 
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
 
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

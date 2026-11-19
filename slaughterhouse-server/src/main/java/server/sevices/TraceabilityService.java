@@ -29,13 +29,13 @@ public class TraceabilityService
   }
 
   @Transactional(readOnly = true)
-  public List<Animal> traceAnimalsFromProduct(long productId)
+  public List<Animal> traceAnimalsFromProduct(java.util.UUID productId)
   {
     return animalDao.getAnimalsByProductId(productId);
   }
 
   @Transactional(readOnly = true)
-  public List<Product> traceProductFromAnimal(long animalId)
+  public List<Product> traceProductFromAnimal(String animalId)
   {
     return productDao.getProductsByAnimalId(animalId);
   }

@@ -7,6 +7,7 @@ import server.persistence.NotFound;
 import server.persistence.interfaces.ProductDao;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class ProductDaoDatabase implements ProductDao
@@ -28,7 +29,7 @@ public class ProductDaoDatabase implements ProductDao
     em.merge(updatedProduct);
   }
 
-  @Override public Product getProductById(long id)
+  @Override public Product getProductById(UUID id)
   {
     Product toFind = em.find(Product.class, id);
     if (toFind == null)
@@ -36,11 +37,11 @@ public class ProductDaoDatabase implements ProductDao
     return toFind;
   }
 
-  @Override public List<Product> getProductsByAnimalId(long animalId)
+  @Override public List<Product> getProductsByAnimalId(String earmark)
   {
     return em.createQuery("SELECT DISTINCT p FROM Product p " + "JOIN p.trays t "
-            + "JOIN AnimalPart ap ON ap.tray = t " + "JOIN ap.animal a " + "WHERE a.id = :animalId",
-        Product.class).setParameter("animalId", animalId).getResultList();
+            + "JOIN AnimalPart ap ON ap.tray = t " + "JOIN ap.animal a " + "WHERE a.earmark = :earmark",
+        Product.class).setParameter("earmark", earmark).getResultList();
   }
 
   @Override public List<Product> getAllProducts()
@@ -48,7 +49,7 @@ public class ProductDaoDatabase implements ProductDao
     return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
   }
 
-  @Override public void deleteProduct(long id)
+  @Override public void deleteProduct(UUID id)
   {
     Product toRemove = getProductById(id);
     if (toRemove == null)

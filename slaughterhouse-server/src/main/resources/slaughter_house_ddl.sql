@@ -2,21 +2,17 @@ DROP SCHEMA IF EXISTS slaughter_house CASCADE;
 CREATE SCHEMA IF NOT EXISTS slaughter_house;
 set search_path = "slaughter_house";
 
-CREATE SEQUENCE IF NOT EXISTS farm_seq START WITH 1 INCREMENT BY 50;
-CREATE SEQUENCE IF NOT EXISTS animal_seq START WITH 1 INCREMENT BY 50;
-CREATE SEQUENCE IF NOT EXISTS tray_seq START WITH 1 INCREMENT BY 50;
-CREATE SEQUENCE IF NOT EXISTS animal_part_seq START WITH 1 INCREMENT BY 50;
-
 CREATE TABLE IF NOT EXISTS farm
 (
-    id   BIGINT PRIMARY KEY,
+    id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255)
 );
 
+
 CREATE TABLE IF NOT EXISTS animal
 (
-    id           BIGINT PRIMARY KEY,
-    farm_id      BIGINT REFERENCES farm (id),
+    earmark      VARCHAR(255) PRIMARY KEY,
+    farm_id      UUID REFERENCES farm (id),
     arrival_date Date,
     type         VARCHAR(255),
     weight       DOUBLE PRECISION
@@ -24,24 +20,23 @@ CREATE TABLE IF NOT EXISTS animal
 
 CREATE TABLE IF NOT EXISTS tray
 (
-    id         BIGINT PRIMARY KEY,
+    id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     max_weight INTEGER,
     weight     DOUBLE PRECISION
 );
 
 CREATE TABLE IF NOT EXISTS animal_part
 (
-    id        BIGINT PRIMARY KEY,
-    animal_id BIGINT REFERENCES animal (id),
-    tray_id   BIGINT REFERENCES tray (id),
+    id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    animal_id VARCHAR(255) REFERENCES animal (earmark),
+    tray_id   UUID REFERENCES tray (id),
     weight    DOUBLE PRECISION,
     part_type VARCHAR(255)
 );
-CREATE SEQUENCE IF NOT EXISTS product_id_seq;
 
 CREATE TABLE IF NOT EXISTS package
 (
-    id            BIGINT PRIMARY KEY DEFAULT nextval('product_id_seq'),
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     serial        varchar(255),
     packaged_Date DATE,
     weight        DOUBLE PRECISION
@@ -49,7 +44,7 @@ CREATE TABLE IF NOT EXISTS package
 
 CREATE TABLE IF NOT EXISTS half_animal
 (
-    id            BIGINT PRIMARY KEY DEFAULT nextval('product_id_seq'),
+    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     serial        varchar(255),
     packaged_Date DATE,
     weight        DOUBLE PRECISION
@@ -57,84 +52,75 @@ CREATE TABLE IF NOT EXISTS half_animal
 
 CREATE TABLE IF NOT EXISTS product_tray
 (
-    product_id BIGINT NOT NULL,
-    tray_id    BIGINT NOT NULL REFERENCES tray (id),
+    product_id UUID NOT NULL,
+    tray_id    UUID NOT NULL REFERENCES tray (id),
     PRIMARY KEY (product_id, tray_id)
 );
 
 INSERT INTO farm (id, name)
-VALUES (1, 'Nørgaard Gård'),
-       (2, 'Solskin Farm'),
-       (3, 'Grøn Mark'),
-       (4, 'Vestjysk Landbrug'),
-       (5, 'Bakkegården');
+VALUES ('f0000000-0000-0000-0000-000000000001', 'Nørgaard Gård'),
+       ('f0000000-0000-0000-0000-000000000002', 'Solskin Farm'),
+       ('f0000000-0000-0000-0000-000000000003', 'Grøn Mark'),
+       ('f0000000-0000-0000-0000-000000000004', 'Vestjysk Landbrug'),
+       ('f0000000-0000-0000-0000-000000000005', 'Bakkegården');
 
-INSERT INTO animal (id, farm_id, arrival_date, type, weight)
-VALUES (1, 1, '2026-01-10', 'COW', 620.5),
-       (2, 2, '2026-01-10', 'PIG', 110.0),
-       (3, 3, '2026-01-10', 'CHICKEN', 2.4),
-       (4, 4, '2026-01-10', 'COW', 580.0),
-       (5, 5, '2026-01-10', 'PIG', 95.3);
+INSERT INTO animal (earmark, farm_id, arrival_date, type, weight)
+VALUES ('DK-0001', 'f0000000-0000-0000-0000-000000000001', '2026-01-10', 'COW', 620.5),
+       ('DK-0002', 'f0000000-0000-0000-0000-000000000002', '2026-01-10', 'PIG', 110.0),
+       ('DK-0003', 'f0000000-0000-0000-0000-000000000003', '2026-01-10', 'CHICKEN', 2.4),
+       ('DK-0004', 'f0000000-0000-0000-0000-000000000004', '2026-01-10', 'COW', 580.0),
+       ('DK-0005', 'f0000000-0000-0000-0000-000000000005', '2026-01-10', 'PIG', 95.3);
 
 INSERT INTO tray (id, max_weight, weight)
-VALUES (1, 200, 150.0),
-       (2, 150, 80.0),
-       (3, 100, 45.5),
-       (4, 250, 200.0),
-       (5, 180, 120.0);
+VALUES ('c0000000-0000-0000-0000-000000000001', 200, 150.0),
+       ('c0000000-0000-0000-0000-000000000002', 150, 80.0),
+       ('c0000000-0000-0000-0000-000000000003', 100, 45.5),
+       ('c0000000-0000-0000-0000-000000000004', 250, 200.0),
+       ('c0000000-0000-0000-0000-000000000005', 180, 120.0);
 
 INSERT INTO animal_part (id, animal_id, tray_id, weight, part_type)
-VALUES (1, 1, 1, 150.0, 'leg'),
-       (2, 2, 2, 20.0, 'shoulder'),
-       (3, 3, 3, 0.5, 'breast'),
-       (4, 4, 4, 180.0, 'ribs'),
-       (5, 5, 5, 15.0, 'loin');
+VALUES ('d0000000-0000-0000-0000-000000000001', 'DK-0001', 'c0000000-0000-0000-0000-000000000001', 150.0, 'leg'),
+       ('d0000000-0000-0000-0000-000000000002', 'DK-0002', 'c0000000-0000-0000-0000-000000000002', 20.0, 'shoulder'),
+       ('d0000000-0000-0000-0000-000000000003', 'DK-0003', 'c0000000-0000-0000-0000-000000000003', 0.5, 'breast'),
+       ('d0000000-0000-0000-0000-000000000004', 'DK-0004', 'c0000000-0000-0000-0000-000000000004', 180.0, 'ribs'),
+       ('d0000000-0000-0000-0000-000000000005', 'DK-0005', 'c0000000-0000-0000-0000-000000000005', 15.0, 'loin');
 
--- package og half_animal deler product_id_seq (TABLE_PER_CLASS kræver unikke id'er på tværs af hele Product-hierarkiet)
 INSERT INTO package (id, serial, packaged_date, weight)
-VALUES (nextval('product_id_seq'), 'PKG-0001', '2026-01-10', 12.5),
-       (nextval('product_id_seq'), 'PKG-0002', '2026-01-11', 8.3),
-       (nextval('product_id_seq'), 'PKG-0003', '2026-01-12', 15.0),
-       (nextval('product_id_seq'), 'PKG-0004', '2026-01-13', 9.7),
-       (nextval('product_id_seq'), 'PKG-0005', '2026-01-14', 11.2);
+VALUES ('a0000000-0000-0000-0000-000000000001', 'PKG-0001', '2026-01-10', 12.5),
+       ('a0000000-0000-0000-0000-000000000002', 'PKG-0002', '2026-01-11', 8.3),
+       ('a0000000-0000-0000-0000-000000000003', 'PKG-0003', '2026-01-12', 15.0),
+       ('a0000000-0000-0000-0000-000000000004', 'PKG-0004', '2026-01-13', 9.7),
+       ('a0000000-0000-0000-0000-000000000005', 'PKG-0005', '2026-01-14', 11.2);
 
 INSERT INTO half_animal (id, serial, packaged_date, weight)
-VALUES (nextval('product_id_seq'), 'HALF-0001', '2026-01-10', 210.0),
-       (nextval('product_id_seq'), 'HALF-0002', '2026-01-11', 195.5),
-       (nextval('product_id_seq'), 'HALF-0003', '2026-01-12', 230.0),
-       (nextval('product_id_seq'), 'HALF-0004', '2026-01-13', 205.0),
-       (nextval('product_id_seq'), 'HALF-0005', '2026-01-14', 220.8);
+VALUES ('b0000000-0000-0000-0000-000000000001', 'HALF-0001', '2026-01-10', 210.0),
+       ('b0000000-0000-0000-0000-000000000002', 'HALF-0002', '2026-01-11', 195.5),
+       ('b0000000-0000-0000-0000-000000000003', 'HALF-0003', '2026-01-12', 230.0),
+       ('b0000000-0000-0000-0000-000000000004', 'HALF-0004', '2026-01-13', 205.0),
+       ('b0000000-0000-0000-0000-000000000005', 'HALF-0005', '2026-01-14', 220.8);
 
--- Ekstra trays som flere dyr bidrager til, for at kunne vise tracing mellem dyr og products
 INSERT INTO tray (id, max_weight, weight)
-VALUES (6, 220, 160.0),
-       (7, 130, 70.0),
-       (8, 90, 30.0);
+VALUES ('c0000000-0000-0000-0000-000000000006', 220, 160.0),
+       ('c0000000-0000-0000-0000-000000000007', 130, 70.0),
+       ('c0000000-0000-0000-0000-000000000008', 90, 30.0);
 
--- Dyr 1 og 4 bidrager begge til tray 6 (co-mingling), dyr 2 bidrager to forskellige dele til to trays
 INSERT INTO animal_part (id, animal_id, tray_id, weight, part_type)
-VALUES (6, 1, 6, 90.0, 'shoulder'),
-       (7, 4, 6, 70.0, 'flank'),
-       (8, 2, 7, 55.0, 'belly'),
-       (9, 3, 8, 0.3, 'wing');
+VALUES ('d0000000-0000-0000-0000-000000000006', 'DK-0001', 'c0000000-0000-0000-0000-000000000006', 90.0, 'shoulder'),
+       ('d0000000-0000-0000-0000-000000000007', 'DK-0004', 'c0000000-0000-0000-0000-000000000006', 70.0, 'flank'),
+       ('d0000000-0000-0000-0000-000000000008', 'DK-0002', 'c0000000-0000-0000-0000-000000000007', 55.0, 'belly'),
+       ('d0000000-0000-0000-0000-000000000009', 'DK-0003', 'c0000000-0000-0000-0000-000000000008', 0.3, 'wing');
 
 INSERT INTO product_tray (product_id, tray_id)
-VALUES (1, 1),
-       (2, 2),
-       (3, 3),
-       (6, 4),
-       (7, 5),
-       -- package 1 er også bygget af tray 6 -> kan spores til dyr 1 OG dyr 4
-       (1, 6),
-       -- package 2 trækker på to trays fra samme dyr (dyr 2)
-       (2, 7),
-       -- half_animal id 8 kan spores til dyr 3 via tray 8
-       (8, 8),
-       -- tray 1 (dyr 1's "leg") indgår også i half_animal id 6 -> samme tray i to forskellige products
-       (6, 1);
+VALUES ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001'),
+       ('a0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000002'),
+       ('a0000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000003'),
+       ('b0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000004'),
+       ('b0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000005'),
 
--- Saet sekvenserne efter de id er der er indsat ovenfor (ogsaa hvis seed-data kommenteres ind)
-SELECT setval('farm_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM farm;
-SELECT setval('animal_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM animal;
-SELECT setval('tray_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM tray;
-SELECT setval('animal_part_seq', COALESCE(MAX(id), 1), MAX(id) IS NOT NULL) FROM animal_part;
+       ('a0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000006'),
+
+       ('a0000000-0000-0000-0000-000000000002', 'c0000000-0000-0000-0000-000000000007'),
+
+       ('b0000000-0000-0000-0000-000000000003', 'c0000000-0000-0000-0000-000000000008'),
+
+       ('b0000000-0000-0000-0000-000000000001', 'c0000000-0000-0000-0000-000000000001');

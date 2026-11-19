@@ -26,6 +26,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceTest
 {
+  private static final java.util.UUID FARM = java.util.UUID.randomUUID();
   @Mock private AnimalRepository animalRepository;
   @Mock private FarmRepository farmRepository;
 
@@ -36,10 +37,10 @@ class RegistrationServiceTest
     service = new RegistrationService(animalRepository, farmRepository);
   }
 
-  private Animal animal(long id, Farm farm, LocalDate date, double weight, AnimalType type)
+  private Animal animal(String id, Farm farm, LocalDate date, double weight, AnimalType type)
   {
-    Animal animal = new Animal(farm, date, weight, type);
-    animal.setId(id);
+    Animal animal = new Animal(id, farm, date, weight, type);
+    animal.setEarmark(id);
     return animal;
   }
 
@@ -47,17 +48,17 @@ class RegistrationServiceTest
 
   @Test void getAnimal_returnsAnimalWhenFound()
   {
-    Animal animal = animal(1L, new Farm("Farm"), LocalDate.of(2026, 10, 12), 200, AnimalType.COW);
-    when(animalRepository.findById(1L)).thenReturn(Optional.of(animal));
+    Animal animal = animal("DK-1", new Farm("Farm"), LocalDate.of(2026, 10, 12), 200, AnimalType.COW);
+    when(animalRepository.findById("DK-1")).thenReturn(Optional.of(animal));
 
-    assertSame(animal, service.getAnimal(1L));
+    assertSame(animal, service.getAnimal("DK-1"));
   }
 
   @Test void getAnimal_throwsNotFoundWhenMissing()
   {
-    when(animalRepository.findById(99L)).thenReturn(Optional.empty());
+    when(animalRepository.findById("DK-99")).thenReturn(Optional.empty());
 
-    NotFound ex = assertThrows(NotFound.class, () -> service.getAnimal(99L));
+    NotFound ex = assertThrows(NotFound.class, () -> service.getAnimal("DK-99"));
     assertEquals("Animal Not found", ex.getMessage());
   }
 
@@ -66,14 +67,14 @@ class RegistrationServiceTest
   @Test void registerAnimal_savesAnimalWithFarmAndTodayAndReturnsDto()
   {
     Farm farm = new Farm("Sunny Farm");
-    when(farmRepository.findById(5L)).thenReturn(Optional.of(farm));
+    when(farmRepository.findById(FARM)).thenReturn(Optional.of(farm));
     when(animalRepository.save(any(Animal.class))).thenAnswer(inv -> {
       Animal saved = inv.getArgument(0);
-      saved.setId(10L);
+      saved.setEarmark("DK-10");
       return saved;
     });
 
-    AnimalDto dto = service.registerAnimal(new RegisterRequest(5L, AnimalType.PIG, 120.5));
+    AnimalDto dto = service.registerAnimal(new RegisterRequest("DK-10", FARM, AnimalType.PIG, 120.5));
 
     ArgumentCaptor<Animal> captor = ArgumentCaptor.forClass(Animal.class);
     verify(animalRepository).save(captor.capture());
@@ -83,7 +84,7 @@ class RegistrationServiceTest
     assertEquals(120.5, saved.getWeight());
     assertEquals(AnimalType.PIG, saved.getType());
 
-    assertEquals(10L, dto.id());
+    assertEquals("DK-10", dto.earmark());
     assertEquals("Sunny Farm", dto.farmName());
     assertEquals(LocalDate.now(), dto.arrivalDate());
     assertEquals(AnimalType.PIG, dto.animalType());
@@ -92,10 +93,10 @@ class RegistrationServiceTest
 
   @Test void registerAnimal_throwsNotFoundAndDoesNotSaveWhenFarmMissing()
   {
-    when(farmRepository.findById(5L)).thenReturn(Optional.empty());
+    when(farmRepository.findById(FARM)).thenReturn(Optional.empty());
 
     NotFound ex = assertThrows(NotFound.class,
-        () -> service.registerAnimal(new RegisterRequest(5L, AnimalType.COW, 300)));
+        () -> service.registerAnimal(new RegisterRequest("DK-10", FARM, AnimalType.COW, 300)));
 
     assertEquals("Farm Not found", ex.getMessage());
     verify(animalRepository, never()).save(any());
@@ -106,13 +107,13 @@ class RegistrationServiceTest
   @Test void getAnimals_withFarmNameAndDate_usesCombinedQuery()
   {
     LocalDate date = LocalDate.of(2026, 10, 12);
-    Animal animal = animal(1L, new Farm("Farm A"), date, 200, AnimalType.COW);
+    Animal animal = animal("DK-1", new Farm("Farm A"), date, 200, AnimalType.COW);
     when(animalRepository.findByFarmNameAndArrivalDate("Farm A", date)).thenReturn(List.of(animal));
 
     List<AnimalDto> result = service.getAnimalsByFarmNameOrDate("Farm A", date);
 
     assertEquals(1, result.size());
-    assertEquals(new AnimalDto(1L, "Farm A", date, AnimalType.COW, 200), result.get(0));
+    assertEquals(new AnimalDto("DK-1", "Farm A", date, AnimalType.COW, 200), result.get(0));
     verify(animalRepository).findByFarmNameAndArrivalDate("Farm A", date);
     verifyNoMoreInteractions(animalRepository);
   }
@@ -120,7 +121,7 @@ class RegistrationServiceTest
   @Test void getAnimals_withOnlyDate_usesDateQuery()
   {
     LocalDate date = LocalDate.of(2026, 10, 12);
-    Animal animal = animal(2L, new Farm("Farm B"), date, 90, AnimalType.PIG);
+    Animal animal = animal("DK-2", new Farm("Farm B"), date, 90, AnimalType.PIG);
     when(animalRepository.findByArrivalDate(date)).thenReturn(List.of(animal));
 
     List<AnimalDto> result = service.getAnimalsByFarmNameOrDate(null, date);
@@ -133,13 +134,13 @@ class RegistrationServiceTest
 
   @Test void getAnimals_withOnlyFarmName_usesFarmNameQuery()
   {
-    Animal animal = animal(3L, new Farm("Farm C"), LocalDate.of(2026, 1, 1), 150, AnimalType.COW);
+    Animal animal = animal("DK-3", new Farm("Farm C"), LocalDate.of(2026, 1, 1), 150, AnimalType.COW);
     when(animalRepository.findByFarmName("Farm C")).thenReturn(List.of(animal));
 
     List<AnimalDto> result = service.getAnimalsByFarmNameOrDate("Farm C", null);
 
     assertEquals(1, result.size());
-    assertEquals(3L, result.get(0).id());
+    assertEquals("DK-3", result.get(0).earmark());
     verify(animalRepository).findByFarmName("Farm C");
     verifyNoMoreInteractions(animalRepository);
   }
@@ -148,14 +149,14 @@ class RegistrationServiceTest
   {
     Farm farm = new Farm("Farm D");
     when(animalRepository.findAll()).thenReturn(List.of(
-        animal(1L, farm, LocalDate.of(2026, 1, 1), 100, AnimalType.COW),
-        animal(2L, farm, LocalDate.of(2026, 1, 2), 110, AnimalType.PIG)));
+        animal("DK-1", farm, LocalDate.of(2026, 1, 1), 100, AnimalType.COW),
+        animal("DK-2", farm, LocalDate.of(2026, 1, 2), 110, AnimalType.PIG)));
 
     List<AnimalDto> result = service.getAnimalsByFarmNameOrDate(null, null);
 
     assertEquals(2, result.size());
-    assertEquals(1L, result.get(0).id());
-    assertEquals(2L, result.get(1).id());
+    assertEquals("DK-1", result.get(0).earmark());
+    assertEquals("DK-2", result.get(1).earmark());
     verify(animalRepository).findAll();
     verifyNoMoreInteractions(animalRepository);
   }

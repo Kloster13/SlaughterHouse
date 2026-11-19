@@ -3,13 +3,15 @@ package server.persistence.interfaces;
 import domain.Animal;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface AnimalDao
 {
   void createAnimal(Animal animal);
   void update(Animal updatedAnimal);
-  Animal getAnimalById(long id);
+  Optional<Animal> getAnimalByEarMark(String earmark);
   List<Animal> getAllAnimals();
-  List<Animal> getAnimalsByProductId(long id);
-  void deleteAnimal(long id);
+  List<Animal> getAnimalsByProductId(UUID id);
+  void deleteAnimal(String earmark);
 }
